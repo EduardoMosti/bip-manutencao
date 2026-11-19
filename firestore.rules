@@ -1,0 +1,77 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function logado() {
+      return request.auth != null;
+    }
+
+    function perfilDoUsuario() {
+      return get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.perfil;
+    }
+
+    function ehOperador() {
+      return logado()
+        && exists(/databases/$(database)/documents/usuarios/$(request.auth.uid))
+        && perfilDoUsuario() == 'operador';
+    }
+
+    function ehTecnico() {
+      return logado()
+        && exists(/databases/$(database)/documents/usuarios/$(request.auth.uid))
+        && perfilDoUsuario() == 'tecnico';
+    }
+
+    // Perfis: o usuario le o proprio documento, mas nunca escolhe nem altera o perfil.
+    match /usuarios/{uid} {
+      allow read: if logado() && request.auth.uid == uid;
+      allow create: if logado() && request.auth.uid == uid
+                    && !('perfil' in request.resource.data);
+      allow update: if logado() && request.auth.uid == uid
+                    && !('perfil' in request.resource.data.diff(resource.data).affectedKeys());
+      allow delete: if false;
+    }
+
+    // Maquinas: operador e tecnico leem, so o tecnico cadastra.
+    match /maquinas/{codigo} {
+      allow read: if ehOperador() || ehTecnico();
+      allow create, update: if ehTecnico();
+      allow delete: if false;
+    }
+
+    // Chamados
+    match /chamados/{id} {
+      allow read: if ehTecnico()
+                  || (ehOperador() && resource.data.abertoPor == request.auth.uid);
+
+      allow create: if ehOperador()
+                    && request.resource.data.abertoPor == request.auth.uid
+                    && request.resource.data.status == 'aberto'
+                    && request.resource.data.prioridade in ['baixa', 'media', 'alta']
+                    && request.resource.data.maquinaId is string
+                    && request.resource.data.descricao is string
+                    && request.resource.data.descricao.size() > 0;
+
+      allow update: if ehTecnico() && (assumir() || encerrar());
+      allow delete: if false;
+
+      function assumir() {
+        return resource.data.status == 'aberto'
+          && request.resource.data.status == 'em_atendimento'
+          && request.resource.data.tecnicoUid == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'tecnicoUid', 'tecnicoNome', 'assumidoEm']);
+      }
+
+      function encerrar() {
+        return resource.data.status == 'em_atendimento'
+          && resource.data.tecnicoUid == request.auth.uid
+          && request.resource.data.status == 'encerrado'
+          && request.resource.data.solucao is string
+          && request.resource.data.solucao.size() > 0
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'solucao', 'fechadoEm']);
+      }
+    }
+  }
+}
