@@ -1,0 +1,39 @@
+# Android / Gradle
+*.iml
+.gradle/
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+bin/
+gen/
+out/
+
+# Android Studio
+.idea/
+local.properties
+.navigation/
+*.hprof
+
+# Firebase: NUNCA versionar (NC8)
+google-services.json
+**/google-services.json
+firebase-debug.log
+.firebaserc
+
+# Chaves e segredos (Cloudinary, keystores)
+*.jks
+*.keystore
+keystore.properties
+secrets.properties
+.env
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Excecao: o APK de debug final vai na aba Releases, nao no codigo
