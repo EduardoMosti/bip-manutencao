@@ -22,4 +22,10 @@
     <string name="erro_email_em_uso">Este e-mail já está cadastrado</string>
     <string name="erro_rede">Sem conexão. Verifique a internet e tente de novo</string>
     <string name="erro_generico">Não foi possível concluir. Tente novamente</string>
+
+
+    <!-- Tela principal -->
+    <string name="main_titulo">Início</string>
+    <string name="main_logado_como">Conectado como</string>
+    <string name="menu_sair">Sair</string>
 </resources>
