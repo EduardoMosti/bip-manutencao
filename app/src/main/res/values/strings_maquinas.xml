@@ -30,7 +30,7 @@
     <string name="erro_codigo_vazio">Informe o código da máquina</string>
     <string name="erro_codigo_invalido">Use de 3 a 20 caracteres: letras, números e hífen (ex.: MAQ-004)</string>
     <string name="erro_codigo_existente">Já existe uma máquina com o código %1$s</string>
-    <string name="erro_nome_vazio">Informe o nome da máquina</string>
+    <string name="erro_maquina_nome_vazio">Informe o nome da máquina</string>
     <string name="erro_setor_vazio">Informe o setor da máquina</string>
     <string name="erro_sem_permissao">Somente técnicos de manutenção podem cadastrar máquinas</string>
     <string name="erro_salvar_generico">Não foi possível salvar. Verifique a conexão e tente de novo.</string>

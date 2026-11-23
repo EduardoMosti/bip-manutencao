@@ -115,7 +115,7 @@ public class CadastroMaquinaActivity extends AppCompatActivity {
             valido = false;
         }
         if (nome.isEmpty()) {
-            tilNome.setError(getString(R.string.erro_nome_vazio));
+            tilNome.setError(getString(R.string.erro_maquina_nome_vazio));
             valido = false;
         }
         if (setor.isEmpty()) {
