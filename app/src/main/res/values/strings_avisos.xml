@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Textos da US-13 (aviso de chamado aberto).
+    Arquivo separado do strings.xml para evitar conflito de merge com os colegas.
+-->
+<resources>
+    <string name="aviso_novo_chamado">Novo chamado: %1$s · prioridade %2$s</string>
+    <string name="aviso_novos_chamados">%1$d novos chamados abertos</string>
+    <string name="aviso_ver">Ver</string>
+    <string name="aviso_ok">OK</string>
+    <string name="aviso_detalhe_titulo">Chamado da máquina %1$s</string>
+    <string name="aviso_detalhe_mensagem">Prioridade: %1$s\n\nProblema: %2$s\n\nAberto em: %3$s</string>
+    <string name="aviso_nao_informado">não informada</string>
+    <string name="aviso_agora">agora</string>
+</resources>

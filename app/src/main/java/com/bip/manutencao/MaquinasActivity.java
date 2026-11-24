@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bip.manutencao.adapter.MaquinaAdapter;
 import com.bip.manutencao.data.MaquinaRepository;
 import com.bip.manutencao.model.Maquina;
+import com.bip.manutencao.util.AvisoChamados;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +35,9 @@ import java.util.List;
  * - Toque numa máquina: abre o QR dela para imprimir.
  *
  * Implementa a interface do Adapter para receber o clique nas linhas.
+ *
+ * US-13: enquanto esta tela está aberta, o técnico é avisado de chamados novos
+ * (AvisoChamados). Quando existir a tela inicial do técnico, ligue o aviso nela também.
  */
 public class MaquinasActivity extends AppCompatActivity
         implements MaquinaAdapter.OnMaquinaClickListener {
@@ -51,6 +55,7 @@ public class MaquinasActivity extends AppCompatActivity
     private MaquinaAdapter adapter;
     private final MaquinaRepository repository = new MaquinaRepository();
     private ListenerRegistration registroListener; // para remover no onStop
+    private AvisoChamados avisoChamados;           // US-13: aviso de chamado aberto
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +93,9 @@ public class MaquinasActivity extends AppCompatActivity
         FloatingActionButton fab = findViewById(R.id.fabNovaMaquina);
         fab.setOnClickListener(v ->
                 startActivity(new Intent(this, CadastroMaquinaActivity.class)));
+
+        // US-13: aviso de chamado novo. A Snackbar aparece acima do FAB.
+        avisoChamados = new AvisoChamados(this, findViewById(R.id.main), fab);
     }
 
     @Override
@@ -117,6 +125,9 @@ public class MaquinasActivity extends AppCompatActivity
                 mostrar(Estado.ERRO);
             }
         });
+
+        // US-13: começa a ouvir chamados abertos (só avisa os que chegarem a partir de agora)
+        avisoChamados.iniciar();
     }
 
     @Override
@@ -127,6 +138,8 @@ public class MaquinasActivity extends AppCompatActivity
             registroListener.remove();
             registroListener = null;
         }
+        // US-13: para de ouvir os chamados junto com a lista
+        avisoChamados.parar();
     }
 
     /** Clique numa linha da lista (vem do Adapter): abre o QR da máquina. */
