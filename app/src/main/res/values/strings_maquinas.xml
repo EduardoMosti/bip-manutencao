@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Textos da US-01 (máquinas) e da tela de QR.
+    Arquivo SEPARADO do strings.xml de propósito: o Android junta todos os XML
+    de values/ na compilação, e cada integrante editando o seu arquivo evita
+    conflito de merge no Git.
+-->
+<resources>
+    <!-- Títulos das telas (usados no android:label do Manifest) -->
+    <string name="titulo_maquinas">Máquinas</string>
+    <string name="titulo_cadastro_maquina">Nova máquina</string>
+    <string name="titulo_qr">QR Code</string>
+
+    <!-- Lista -->
+    <string name="maquina_nova">Cadastrar nova máquina</string>
+    <string name="maquina_setor_formato">Setor: %1$s</string>
+    <string name="maquinas_vazio_titulo">Nenhuma máquina cadastrada</string>
+    <string name="maquinas_vazio_texto">Toque em + para cadastrar a primeira máquina e gerar o QR dela.</string>
+    <string name="maquinas_erro">Não foi possível carregar as máquinas. Verifique a internet e se você entrou como técnico.</string>
+
+    <!-- Formulário -->
+    <string name="maquina_codigo">Código da máquina</string>
+    <string name="maquina_codigo_ajuda">Ex.: MAQ-004. Vai dentro do QR.</string>
+    <string name="maquina_nome">Nome</string>
+    <string name="maquina_setor">Setor</string>
+    <string name="maquina_salvar">Salvar e gerar QR</string>
+    <string name="maquina_cadastrada">Máquina cadastrada</string>
+
+    <!-- Mensagens de validação e erro (NC6) -->
+    <string name="erro_codigo_vazio">Informe o código da máquina</string>
+    <string name="erro_codigo_invalido">Use de 3 a 20 caracteres: letras, números e hífen (ex.: MAQ-004)</string>
+    <string name="erro_codigo_existente">Já existe uma máquina com o código %1$s</string>
+    <string name="erro_maquina_nome_vazio">Informe o nome da máquina</string>
+    <string name="erro_setor_vazio">Informe o setor da máquina</string>
+    <string name="erro_sem_permissao">Somente técnicos de manutenção podem cadastrar máquinas</string>
+    <string name="erro_salvar_generico">Não foi possível salvar. Verifique a conexão e tente de novo.</string>
+    <string name="erro_sem_login">Entre com sua conta para continuar</string>
+
+    <!-- Tela de QR -->
+    <string name="qr_descricao">QR Code com o código %1$s</string>
+    <string name="qr_instrucao">Imprima e cole este QR na máquina. O operador lê com o app para abrir o chamado.</string>
+    <string name="erro_qr_sem_conteudo">Nada para gerar QR</string>
+    <string name="erro_qr_gerar">Não foi possível gerar o QR Code</string>
+</resources>

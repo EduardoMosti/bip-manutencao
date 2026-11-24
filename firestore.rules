@@ -33,9 +33,17 @@ service cloud.firestore {
     }
 
     // Maquinas: operador e tecnico leem, so o tecnico cadastra.
+    // US-01: "update" bloqueado -> um cadastro com codigo repetido vira update
+    // e e recusado aqui tambem (o app ja checa com transacao; isto e a 2a barreira).
     match /maquinas/{codigo} {
       allow read: if ehOperador() || ehTecnico();
-      allow create, update: if ehTecnico();
+      allow create: if ehTecnico()
+                    && request.resource.data.keys().hasOnly(['nome', 'setor'])
+                    && request.resource.data.nome is string
+                    && request.resource.data.nome.size() > 0
+                    && request.resource.data.setor is string
+                    && request.resource.data.setor.size() > 0;
+      allow update: if false;
       allow delete: if false;
     }
 

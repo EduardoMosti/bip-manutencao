@@ -21,6 +21,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- US-01: telas de máquinas (não são abertas por outros apps: exported=false) -->
+        <activity
+            android:name=".MaquinasActivity"
+            android:exported="false"
+            android:label="@string/titulo_maquinas" />
+        <activity
+            android:name=".CadastroMaquinaActivity"
+            android:exported="false"
+            android:label="@string/titulo_cadastro_maquina"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".QrCodeActivity"
+            android:exported="false"
+            android:label="@string/titulo_qr" />
     </application>
 
 </manifest>

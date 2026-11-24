@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tamanho do QR em paisagem (tela baixa): menor para caber sem rolar tanto. -->
+<resources>
+    <dimen name="qr_tamanho">180dp</dimen>
+</resources>
