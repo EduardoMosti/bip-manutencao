@@ -1,6 +1,7 @@
 package com.bip.manutencao;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -118,6 +119,10 @@ public class LeituraMaquinaActivity extends AppCompatActivity {
         definirCarregando(true);
         repositorio.buscarMaquina(codigo)
                 .addOnSuccessListener(doc -> {
+                    // Se a tela foi fechada durante a busca, a resposta é ignorada
+                    if (isFinishing() || isDestroyed()) {
+                        return;
+                    }
                     definirCarregando(false);
                     if (doc == null || !doc.exists()) {
                         tilCodigo.setError(
@@ -131,6 +136,9 @@ public class LeituraMaquinaActivity extends AppCompatActivity {
                     formulario.launch(intent);
                 })
                 .addOnFailureListener(e -> {
+                    if (isFinishing() || isDestroyed()) {
+                        return;
+                    }
                     definirCarregando(false);
                     tilCodigo.setError(getString(R.string.leitura_erro_buscar));
                 });
@@ -140,5 +148,9 @@ public class LeituraMaquinaActivity extends AppCompatActivity {
         progressLeitura.setVisibility(carregando ? View.VISIBLE : View.GONE);
         btnLerQr.setEnabled(!carregando);
         btnBuscar.setEnabled(!carregando);
+        // Trava a rotação durante a consulta: a resposta nunca chega numa tela recriada
+        setRequestedOrientation(carregando
+                ? ActivityInfo.SCREEN_ORIENTATION_LOCKED
+                : ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 }

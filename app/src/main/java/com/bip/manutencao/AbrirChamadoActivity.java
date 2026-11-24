@@ -1,5 +1,6 @@
 package com.bip.manutencao;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -177,5 +178,9 @@ public class AbrirChamadoActivity extends AppCompatActivity {
     private void definirCarregando(boolean carregando) {
         progressChamado.setVisibility(carregando ? View.VISIBLE : View.GONE);
         btnAbrirChamado.setEnabled(!carregando);
+        // Trava a rotação durante o envio: evita toque duplo e chamado repetido
+        setRequestedOrientation(carregando
+                ? ActivityInfo.SCREEN_ORIENTATION_LOCKED
+                : ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 }

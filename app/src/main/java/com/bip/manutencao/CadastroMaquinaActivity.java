@@ -1,6 +1,7 @@
 package com.bip.manutencao;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -176,6 +177,10 @@ public class CadastroMaquinaActivity extends AppCompatActivity {
     private void setSalvando(boolean salvando) {
         progresso.setVisibility(salvando ? View.VISIBLE : View.GONE);
         btnSalvar.setEnabled(!salvando);
+        // Trava a rotação durante o salvamento: a tela não é recriada sem receber a resposta
+        setRequestedOrientation(salvando
+                ? ActivityInfo.SCREEN_ORIENTATION_LOCKED
+                : ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 
     /** Lê o texto de um campo sem risco de NullPointerException. */
