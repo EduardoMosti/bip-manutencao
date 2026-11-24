@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Textos da US-02 (abrir chamado lendo o QR da máquina).
+    Arquivo separado do strings.xml para evitar conflito de merge com os colegas.
+-->
+<resources>
+
+    <!-- Tela de leitura da máquina (QR ou código digitado) -->
+    <string name="leitura_titulo">Abrir chamado</string>
+    <string name="leitura_instrucao">Leia o QR Code da máquina que precisa de manutenção</string>
+    <string name="leitura_btn_ler_qr">Ler QR da máquina</string>
+    <string name="leitura_ou">ou digite o código</string>
+    <string name="leitura_hint_codigo">Código da máquina (ex.: MAQ-001)</string>
+    <string name="leitura_btn_buscar">Buscar máquina</string>
+    <string name="leitura_prompt_scanner">Aponte a câmera para o QR Code da máquina</string>
+    <string name="leitura_erro_codigo_vazio">Informe o código da máquina</string>
+    <string name="leitura_erro_nao_encontrada">Máquina não encontrada: %1$s</string>
+    <string name="leitura_erro_buscar">Não foi possível buscar a máquina. Verifique a internet e tente de novo</string>
+
+    <!-- Formulário do chamado -->
+    <string name="chamado_titulo">Novo chamado</string>
+    <string name="chamado_maquina_label">Máquina</string>
+    <string name="chamado_maquina_valor">%1$s - %2$s</string>
+    <string name="chamado_setor_valor">Setor: %1$s</string>
+    <string name="chamado_hint_descricao">Descreva o problema</string>
+    <string name="chamado_prioridade_label">Prioridade</string>
+    <string name="chamado_prioridade_baixa">Baixa</string>
+    <string name="chamado_prioridade_media">Média</string>
+    <string name="chamado_prioridade_alta">Alta</string>
+    <string name="chamado_btn_abrir">Abrir chamado</string>
+    <string name="chamado_sucesso">Chamado aberto com sucesso</string>
+    <string name="chamado_erro_descricao_vazia">Descreva o problema</string>
+    <string name="chamado_erro_prioridade">Escolha a prioridade</string>
+    <string name="chamado_erro_gravar">Não foi possível abrir o chamado. Tente novamente</string>
+    <string name="chamado_erro_permissao">Somente operadores podem abrir chamados</string>
+    <string name="chamado_erro_rede">Sem conexão. Verifique a internet e tente de novo</string>
+
+    <!-- Tela inicial -->
+    <string name="main_abrir_chamado">Abrir chamado</string>
+
+</resources>
