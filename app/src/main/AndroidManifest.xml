@@ -13,7 +13,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BIP">
-
         <activity
             android:name=".LoginActivity"
             android:exported="true"
@@ -24,7 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:exported="false"
@@ -43,6 +41,15 @@
             android:name=".QrCodeActivity"
             android:exported="false"
             android:label="@string/titulo_qr" />
+        <!-- US-02: abertura de chamado (leitura da máquina e formulário) -->
+        <activity
+            android:name=".LeituraMaquinaActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".AbrirChamadoActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

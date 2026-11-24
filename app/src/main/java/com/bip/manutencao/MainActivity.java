@@ -44,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
 
         TextView tvEmail = findViewById(R.id.tvEmail);
         tvEmail.setText(usuario.getEmail());
+
+        // US-02: o operador começa o chamado lendo a máquina
+        findViewById(R.id.btnAbrirChamado).setOnClickListener(v ->
+                startActivity(new Intent(this, LeituraMaquinaActivity.class)));
     }
 
     @Override
