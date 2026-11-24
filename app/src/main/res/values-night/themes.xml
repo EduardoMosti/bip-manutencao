@@ -8,6 +8,8 @@
         <item name="colorOnPrimaryContainer">@color/bip_grafite</item>
         <item name="colorSecondary">@color/bip_amarelo</item>
         <item name="colorOnSecondary">@color/bip_grafite</item>
+        <item name="colorSecondaryContainer">@color/bip_amarelo</item>
+        <item name="colorOnSecondaryContainer">@color/bip_grafite</item>
 
         <!-- Fundo e superficies -->
         <item name="android:colorBackground">@color/bip_grafite</item>
