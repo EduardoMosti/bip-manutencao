@@ -1,7 +1,52 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.BIP" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+    <style name="Base.Theme.BIP" parent="Theme.Material3.Dark.NoActionBar">
+        <!-- Marca: amarelo nas acoes principais, grafite na estrutura -->
+        <item name="colorPrimary">@color/bip_amarelo</item>
+        <item name="colorOnPrimary">@color/bip_grafite</item>
+        <item name="colorPrimaryContainer">@color/bip_amarelo_pressionado</item>
+        <item name="colorOnPrimaryContainer">@color/bip_grafite</item>
+        <item name="colorSecondary">@color/bip_amarelo</item>
+        <item name="colorOnSecondary">@color/bip_grafite</item>
+
+        <!-- Fundo e superficies -->
+        <item name="android:colorBackground">@color/bip_grafite</item>
+        <item name="colorOnBackground">@color/bip_texto_primario</item>
+        <item name="colorSurface">@color/bip_superficie</item>
+        <item name="colorOnSurface">@color/bip_texto_primario</item>
+        <item name="colorSurfaceVariant">@color/bip_superficie_elevada</item>
+        <item name="colorOnSurfaceVariant">@color/bip_texto_secundario</item>
+        <item name="colorSurfaceContainerLow">@color/bip_superficie</item>
+        <item name="colorSurfaceContainer">@color/bip_superficie</item>
+        <item name="colorSurfaceContainerHigh">@color/bip_superficie_elevada</item>
+        <item name="colorSurfaceContainerHighest">@color/bip_superficie_elevada</item>
+        <item name="colorOutline">@color/bip_borda</item>
+        <item name="colorOutlineVariant">@color/bip_borda</item>
+
+        <!-- Erro -->
+        <item name="colorError">@color/bip_erro</item>
+
+        <!-- Bordas arredondadas em todos os componentes -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.BIP.Pequeno</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.BIP.Medio</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.BIP.Grande</item>
     </style>
+
+    <style name="Theme.BIP" parent="Base.Theme.BIP" />
+
+    <style name="ShapeAppearance.BIP.Pequeno" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="ShapeAppearance.BIP.Medio" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="ShapeAppearance.BIP.Grande" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
 </resources>

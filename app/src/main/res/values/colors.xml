@@ -2,4 +2,22 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Marca -->
+    <color name="bip_amarelo">#FFC107</color>
+    <color name="bip_amarelo_pressionado">#FFA000</color>
+    <color name="bip_grafite">#212121</color>
+
+    <!-- Superficies e bordas -->
+    <color name="bip_superficie">#2B2B2B</color>
+    <color name="bip_superficie_elevada">#333333</color>
+    <color name="bip_borda">#3D3D3D</color>
+
+    <!-- Texto -->
+    <color name="bip_texto_primario">#F5F5F5</color>
+    <color name="bip_texto_secundario">#A3A3A3</color>
+
+    <!-- Estados -->
+    <color name="bip_erro">#FF6B6B</color>
+    <color name="bip_sucesso">#4CD97B</color>
 </resources>
