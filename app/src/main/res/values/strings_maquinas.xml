@@ -10,6 +10,8 @@
     <string name="titulo_maquinas">Máquinas</string>
     <string name="titulo_cadastro_maquina">Nova máquina</string>
     <string name="titulo_qr">QR Code</string>
+    <!-- Botão da tela Início -->
+    <string name="main_maquinas">Máquinas</string>
 
     <!-- Lista -->
     <string name="maquina_nova">Cadastrar nova máquina</string>

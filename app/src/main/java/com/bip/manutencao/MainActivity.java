@@ -52,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
         // US-03: o técnico vê a fila de chamados abertos
         findViewById(R.id.btnFilaChamados).setOnClickListener(v ->
                 startActivity(new Intent(this, FilaChamadosActivity.class)));
+
+        // US-01: o técnico abre a lista de máquinas (cadastro e QR de cada uma)
+        findViewById(R.id.btnMaquinas).setOnClickListener(v ->
+                startActivity(new Intent(this, MaquinasActivity.class)));
     }
 
     @Override
