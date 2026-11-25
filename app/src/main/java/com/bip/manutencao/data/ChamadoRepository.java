@@ -8,6 +8,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Transaction;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -166,4 +168,68 @@ public class ChamadoRepository {
         }
         return Long.compare(milissegundos(a), milissegundos(b));
     };
+
+    // ------------------------------------------------------------------
+    // US-04 (C4): assumir chamado com transação
+    // ------------------------------------------------------------------
+
+    /**
+     * O técnico assume um chamado aberto: o status vira "em_atendimento" com o
+     * uid e o nome dele.
+     *
+     * Por que transação (runTransaction)?
+     * Dois técnicos podem tocar em "Assumir" quase ao mesmo tempo. Na transação,
+     * o Firestore lê o chamado e grava numa operação só (atômica). Se outro técnico
+     * gravar antes, o Firestore repete a transação, ela lê o status já
+     * "em_atendimento" e é cancelada. Assim só UM técnico consegue assumir.
+     *
+     * Se o chamado não estiver mais aberto, a Task falha com
+     * FirebaseFirestoreException código FAILED_PRECONDITION, e a mensagem da
+     * exceção traz o nome de quem já está atendendo (para a tela mostrar).
+     *
+     * @param chamadoId   ID do documento em chamados/{id}
+     * @param tecnicoUid  uid do técnico logado
+     * @param nomeReserva nome usado se não houver "nome" em usuarios/{uid} (ex.: o e-mail)
+     */
+    public Task<Void> assumir(String chamadoId, String tecnicoUid, String nomeReserva) {
+        DocumentReference chamadoRef = db.collection(COLECAO_CHAMADOS).document(chamadoId);
+        DocumentReference usuarioRef = db.collection(COLECAO_USUARIOS).document(tecnicoUid);
+
+        // 1) Descobre o nome do técnico (fora da transação: é só leitura do perfil)
+        return usuarioRef.get().continueWithTask(tarefaUsuario -> {
+            String nome = nomeReserva;
+            if (tarefaUsuario.isSuccessful() && tarefaUsuario.getResult() != null) {
+                String nomeGravado = tarefaUsuario.getResult().getString("nome");
+                if (nomeGravado != null && !nomeGravado.trim().isEmpty()) {
+                    nome = nomeGravado;
+                }
+            }
+            final String nomeTecnico = nome;
+
+            // 2) Transação: lê o chamado e só grava se ele ainda estiver aberto
+            return db.runTransaction((Transaction.Function<Void>) transacao -> {
+                DocumentSnapshot atual = transacao.get(chamadoRef);
+
+                if (!atual.exists()) {
+                    throw new FirebaseFirestoreException("Chamado não encontrado",
+                            FirebaseFirestoreException.Code.NOT_FOUND);
+                }
+                if (!Chamado.STATUS_ABERTO.equals(atual.getString("status"))) {
+                    // Já assumido (ou encerrado): cancela sem gravar nada.
+                    String quem = atual.getString("tecnicoNome");
+                    throw new FirebaseFirestoreException(quem != null ? quem : "",
+                            FirebaseFirestoreException.Code.FAILED_PRECONDITION);
+                }
+
+                // Só os 4 campos que a regra "assumir()" do firestore.rules permite
+                Map<String, Object> mudancas = new HashMap<>();
+                mudancas.put("status", Chamado.STATUS_EM_ATENDIMENTO);
+                mudancas.put("tecnicoUid", tecnicoUid);
+                mudancas.put("tecnicoNome", nomeTecnico);
+                mudancas.put("assumidoEm", FieldValue.serverTimestamp());
+                transacao.update(chamadoRef, mudancas);
+                return null;
+            });
+        });
+    }
 }

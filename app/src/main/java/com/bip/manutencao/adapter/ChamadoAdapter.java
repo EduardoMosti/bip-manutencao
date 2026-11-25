@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bip.manutencao.R;
 import com.bip.manutencao.model.Chamado;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 
 import java.text.SimpleDateFormat;
@@ -29,13 +30,28 @@ import java.util.Locale;
  *  - onBindViewHolder:   preenche a linha com o chamado da posição X (ao rolar)
  *
  * A lista já chega ordenada do ChamadoRepository (prioridade e depois horário).
+ *
+ * US-04: cada linha tem o botão "Assumir". O clique é repassado para a tela
+ * pela interface OnAssumirListener (padrão do curso: interface de evento no Adapter).
  */
 public class ChamadoAdapter extends RecyclerView.Adapter<ChamadoAdapter.ChamadoViewHolder> {
 
     private static final SimpleDateFormat FORMATO_DATA =
             new SimpleDateFormat("dd/MM HH:mm", Locale.forLanguageTag("pt-BR"));
 
+    /** US-04: interface de evento - a tela decide o que fazer ao tocar em "Assumir". */
+    public interface OnAssumirListener {
+        void onAssumir(Chamado chamado);
+    }
+
     private final List<Chamado> chamados = new ArrayList<>();
+    private OnAssumirListener listenerAssumir; // pode ser null (botão some)
+
+    /** US-04: liga o botão "Assumir" das linhas a quem vai tratar o clique. */
+    public void setOnAssumirListener(OnAssumirListener listener) {
+        this.listenerAssumir = listener;
+        notifyDataSetChanged(); // redesenha para mostrar o botão
+    }
 
     /** Troca o conteúdo da lista (chamado a cada atualização do snapshot listener). */
     public void atualizar(List<Chamado> novaLista) {
@@ -86,6 +102,16 @@ public class ChamadoAdapter extends RecyclerView.Adapter<ChamadoAdapter.ChamadoV
                 ? contexto.getString(R.string.fila_horario_pendente)
                 : FORMATO_DATA.format(chamado.getAbertoEm().toDate());
         holder.tvInfo.setText(contexto.getString(R.string.fila_aberto_info, quem, quando));
+
+        // US-04: botão "Assumir". Usa a posição ATUAL (getBindingAdapterPosition),
+        // porque a fila muda em tempo real e a linha pode ter mudado de lugar.
+        holder.btnAssumir.setVisibility(listenerAssumir != null ? View.VISIBLE : View.GONE);
+        holder.btnAssumir.setOnClickListener(v -> {
+            int pos = holder.getBindingAdapterPosition();
+            if (pos != RecyclerView.NO_POSITION && listenerAssumir != null) {
+                listenerAssumir.onAssumir(chamados.get(pos));
+            }
+        });
     }
 
     @Override
@@ -103,6 +129,7 @@ public class ChamadoAdapter extends RecyclerView.Adapter<ChamadoAdapter.ChamadoV
         final TextView tvMaquina;
         final TextView tvDescricao;
         final TextView tvInfo;
+        final MaterialButton btnAssumir;
 
         ChamadoViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -110,6 +137,7 @@ public class ChamadoAdapter extends RecyclerView.Adapter<ChamadoAdapter.ChamadoV
             tvMaquina = itemView.findViewById(R.id.tvMaquinaChamado);
             tvDescricao = itemView.findViewById(R.id.tvDescricaoChamado);
             tvInfo = itemView.findViewById(R.id.tvInfoChamado);
+            btnAssumir = itemView.findViewById(R.id.btnAssumirChamado);
         }
     }
 }

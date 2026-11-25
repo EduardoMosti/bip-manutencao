@@ -64,5 +64,16 @@
             android:textColor="@color/bip_texto_secundario"
             android:textSize="13sp"
             tools:text="Aberto por Maria em 25/11 12:08" />
+
+        <!-- US-04: o técnico assume o chamado (o clique vai para a tela pelo Adapter) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAssumirChamado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:text="@string/assumir_botao"
+            android:visibility="gone"
+            tools:visibility="visible" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
