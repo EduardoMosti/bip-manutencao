@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Textos da US-03 (fila de chamados do técnico).
+    Arquivo separado do strings.xml para evitar conflito de merge com os colegas.
+-->
+<resources>
+
+    <!-- Tela da fila -->
+    <string name="fila_titulo">Fila de chamados</string>
+    <string name="fila_vazio_titulo">Nenhum chamado na fila</string>
+    <string name="fila_vazio_texto">Quando um operador abrir um chamado, ele aparece aqui sozinho.</string>
+    <string name="fila_erro">Não foi possível carregar a fila. Verifique a internet e se você entrou como técnico.</string>
+
+    <!-- Linha da fila -->
+    <string name="fila_aberto_info">Aberto por %1$s em %2$s</string>
+    <string name="fila_operador_desconhecido">operador</string>
+    <string name="fila_horario_pendente">agora</string>
+
+    <!-- Tela inicial -->
+    <string name="main_fila_chamados">Fila de chamados</string>
+
+</resources>

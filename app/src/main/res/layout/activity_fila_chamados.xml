@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bip_grafite"
+    android:orientation="vertical"
+    tools:context=".FilaChamadosActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/bip_grafite"
+        app:title="@string/fila_titulo"
+        app:titleTextColor="@color/bip_texto_primario" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/bip_borda" />
+
+    <!-- As 4 Views ficam uma em cima da outra; o código mostra só uma por vez -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- 1) Lista da fila -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFila"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="8dp"
+            android:paddingBottom="16dp"
+            android:visibility="gone"
+            tools:listitem="@layout/item_chamado" />
+
+        <!-- 2) Carregando -->
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressoFila"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+
+        <!-- 3) Estado vazio (NC5): nunca tela em branco -->
+        <LinearLayout
+            android:id="@+id/layoutVazioFila"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/fila_vazio_titulo"
+                android:textColor="@color/bip_texto_primario"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/fila_vazio_texto"
+                android:textColor="@color/bip_texto_secundario"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <!-- 4) Erro -->
+        <TextView
+            android:id="@+id/tvErroFila"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="32dp"
+            android:text="@string/fila_erro"
+            android:textColor="@color/bip_erro"
+            android:textSize="15sp"
+            android:visibility="gone" />
+    </FrameLayout>
+</LinearLayout>
