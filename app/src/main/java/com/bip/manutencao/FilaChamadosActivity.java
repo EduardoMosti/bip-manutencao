@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bip.manutencao.adapter.ChamadoAdapter;
 import com.bip.manutencao.data.ChamadoRepository;
 import com.bip.manutencao.model.Chamado;
+import com.bip.manutencao.util.AvisoChamados;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -44,6 +45,9 @@ import java.util.List;
  *  - deu certo: o chamado sai sozinho da fila (o listener só mostra os "aberto");
  *  - já assumido por outro técnico: mostra quem está atendendo e nada muda.
  * A tela implementa a interface do Adapter para receber o clique no botão.
+ *
+ * US-13: enquanto a fila está aberta, um chamado novo também gera um aviso
+ * (Snackbar com máquina e prioridade). É aqui que o técnico passa a maior parte do tempo.
  */
 public class FilaChamadosActivity extends AppCompatActivity
         implements ChamadoAdapter.OnAssumirListener {
@@ -62,6 +66,7 @@ public class FilaChamadosActivity extends AppCompatActivity
     private final ChamadoRepository repositorio = new ChamadoRepository();
     private ListenerRegistration registroListener; // para remover no onStop
     private boolean assumindo; // US-04: evita dois cliques seguidos enquanto grava
+    private AvisoChamados avisoChamados; // US-13: aviso de chamado novo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +93,9 @@ public class FilaChamadosActivity extends AppCompatActivity
 
         adapter = new ChamadoAdapter();
         adapter.setOnAssumirListener(this); // US-04: o botão "Assumir" chama onAssumir()
+
+        // US-13: aviso de chamado novo. Sem FAB nesta tela, a Snackbar fica no rodapé.
+        avisoChamados = new AvisoChamados(this, findViewById(R.id.main), null);
         rvFila.setLayoutManager(new LinearLayoutManager(this));
         rvFila.setAdapter(adapter);
     }
@@ -119,6 +127,9 @@ public class FilaChamadosActivity extends AppCompatActivity
                 mostrar(Estado.ERRO);
             }
         });
+
+        // US-13: começa a ouvir chamados novos (os que já existem não geram aviso)
+        avisoChamados.iniciar();
     }
 
     @Override
@@ -129,6 +140,8 @@ public class FilaChamadosActivity extends AppCompatActivity
             registroListener.remove();
             registroListener = null;
         }
+        // US-13: para de ouvir junto com a fila
+        avisoChamados.parar();
     }
 
     /** Mostra só a View do estado pedido e esconde as outras. */
