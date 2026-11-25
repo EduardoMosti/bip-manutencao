@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
         // US-02: o operador começa o chamado lendo a máquina
         findViewById(R.id.btnAbrirChamado).setOnClickListener(v ->
                 startActivity(new Intent(this, LeituraMaquinaActivity.class)));
+
+        // US-03: o técnico vê a fila de chamados abertos
+        findViewById(R.id.btnFilaChamados).setOnClickListener(v ->
+                startActivity(new Intent(this, FilaChamadosActivity.class)));
     }
 
     @Override
