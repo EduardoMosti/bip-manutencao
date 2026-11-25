@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Textos da US-04 (assumir chamado).
+    Arquivo separado do strings.xml para evitar conflito de merge com os colegas.
+-->
+<resources>
+    <string name="assumir_botao">Assumir</string>
+    <string name="assumir_confirmar_titulo">Assumir o chamado?</string>
+    <string name="assumir_confirmar_mensagem">%1$s\n\n%2$s\n\nO chamado sai da fila e fica em atendimento com você.</string>
+    <string name="assumir_cancelar">Cancelar</string>
+    <string name="assumir_sucesso">Chamado assumido. Ele está em atendimento com você.</string>
+    <string name="assumir_ja_assumido">Este chamado já está em atendimento com %1$s.</string>
+    <string name="assumir_ja_assumido_sem_nome">Este chamado já foi assumido por outro técnico.</string>
+    <string name="assumir_nao_encontrado">Este chamado não existe mais.</string>
+    <string name="assumir_sem_permissao">Somente técnicos de manutenção podem assumir chamados.</string>
+    <string name="assumir_erro">Não foi possível assumir o chamado. Verifique a internet e tente de novo.</string>
+    <string name="assumir_ok">OK</string>
+</resources>
