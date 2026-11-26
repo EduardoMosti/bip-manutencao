@@ -87,6 +87,20 @@
             app:cornerRadius="16dp"
             app:strokeColor="@color/bip_borda" />
 
+        <!-- US-05: chamados assumidos pelo técnico, para encerrar com a solução -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMeusAtendimentos"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/main_meus_atendimentos"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="16dp"
+            app:strokeColor="@color/bip_borda" />
+
         <!-- US-01: o técnico chega ao cadastro de máquinas e aos QR por aqui -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnMaquinas"
