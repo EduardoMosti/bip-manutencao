@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- US-06 (C6) - Textos da tela de histórico da máquina -->
+<resources>
+    <string name="historico_titulo">Histórico da máquina</string>
+    <string name="historico_botao">Ver histórico</string>
+    <string name="historico_total">Total de chamados: %1$d</string>
+
+    <!-- Estado vazio (NC5) e erro -->
+    <string name="historico_vazio_titulo">Sem chamados para esta máquina</string>
+    <string name="historico_vazio_texto">Quando um operador abrir um chamado desta máquina, ele aparece aqui.</string>
+    <string name="historico_erro">Não foi possível carregar o histórico. Verifique a internet e tente de novo.</string>
+    <string name="historico_sem_maquina">Máquina não informada</string>
+
+    <!-- Situação do chamado -->
+    <string name="historico_status_aberto">Aguardando técnico</string>
+    <string name="historico_status_em_atendimento">Em atendimento</string>
+    <string name="historico_status_encerrado">Encerrado</string>
+
+    <!-- Linhas do cartão -->
+    <string name="historico_aberto_em">Aberto em %1$s por %2$s</string>
+    <string name="historico_encerrado_em">Encerrado em %1$s</string>
+    <string name="historico_tecnico">Técnico: %1$s</string>
+    <string name="historico_solucao">Solução: %1$s</string>
+    <string name="historico_duracao">Duração do reparo: %1$s</string>
+    <string name="historico_em_andamento">Em andamento, sem duração final</string>
+    <string name="historico_horario_pendente">agora</string>
+    <string name="historico_desconhecido">não informado</string>
+
+    <!-- Formatos da duração -->
+    <string name="historico_duracao_min">%1$d min</string>
+    <string name="historico_duracao_h">%1$d h %2$d min</string>
+    <string name="historico_duracao_dias">%1$d d %2$d h</string>
+</resources>
