@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Repository: a classe que conversa com a coleção "chamados" do Firestore (US-02 e US-03).
+ * Repository: a classe que conversa com a coleção "chamados" do Firestore (US-02 a US-05).
  *
  * Ela também tem a busca de máquina pelo código do QR. Ficou aqui, e não no
  * MaquinaRepository (US-01), para não mexer no arquivo de outra história
@@ -230,6 +230,113 @@ public class ChamadoRepository {
                 transacao.update(chamadoRef, mudancas);
                 return null;
             });
+        });
+    }
+
+    // ------------------------------------------------------------------
+    // US-05 (C5): atendimentos do técnico e encerramento do chamado
+    // ------------------------------------------------------------------
+
+    /**
+     * Texto que vai na mensagem da exceção quando o chamado já não está "em_atendimento"
+     * (por exemplo, já foi encerrado). A tela compara com este valor para escolher o aviso.
+     */
+    public static final String JA_ENCERRADO = "__ja_encerrado__";
+
+    /**
+     * Fica "ouvindo" os chamados que ESTE técnico assumiu e ainda não encerrou
+     * (snapshot listener - NC2). É a lista de onde o técnico escolhe qual encerrar.
+     *
+     * Por que existe? O chamado assumido sai da fila (US-03 só mostra "aberto"),
+     * então o técnico precisa de outro lugar para achá-lo de novo.
+     *
+     * Dois filtros de igualdade (status + tecnicoUid) não exigem índice composto.
+     * A ordem (o mais antigo assumido primeiro) é feita aqui no código, como na fila.
+     *
+     * @return o registro do listener. A Activity DEVE chamar remove() no onStop.
+     */
+    public ListenerRegistration ouvirMeusAtendimentos(String tecnicoUid,
+                                                      OnChamadosListener callback) {
+        return db.collection(COLECAO_CHAMADOS)
+                .whereEqualTo("status", Chamado.STATUS_EM_ATENDIMENTO)
+                .whereEqualTo("tecnicoUid", tecnicoUid)
+                .addSnapshotListener((snapshot, erro) -> {
+                    if (erro != null || snapshot == null) {
+                        callback.onErro(erro);
+                        return;
+                    }
+                    List<Chamado> lista = new ArrayList<>();
+                    for (DocumentSnapshot doc : snapshot.getDocuments()) {
+                        Chamado chamado = doc.toObject(Chamado.class,
+                                DocumentSnapshot.ServerTimestampBehavior.ESTIMATE);
+                        if (chamado != null) {
+                            lista.add(chamado);
+                        }
+                    }
+                    Collections.sort(lista, COMPARADOR_ATENDIMENTO);
+                    callback.onLista(lista);
+                });
+    }
+
+    /** Horário em que o técnico assumiu, em milissegundos; sem horário, vai para o fim. */
+    private static long milissegundosAssumido(Chamado chamado) {
+        return chamado.getAssumidoEm() == null
+                ? Long.MAX_VALUE
+                : chamado.getAssumidoEm().toDate().getTime();
+    }
+
+    private static final Comparator<Chamado> COMPARADOR_ATENDIMENTO = (a, b) ->
+            Long.compare(milissegundosAssumido(a), milissegundosAssumido(b));
+
+    /**
+     * O técnico encerra um chamado que ele assumiu: o status vira "encerrado" e
+     * o app grava a solução e a data de fechamento (fechadoEm) ao lado de abertoEm.
+     * A diferença entre fechadoEm e abertoEm é o tempo de parada (usado na US-06).
+     *
+     * Por que transação? Para ler e gravar numa operação só: se o chamado mudou
+     * enquanto o técnico digitava (já encerrado, ou de outro técnico), nada é gravado.
+     *
+     * Quando a transação é cancelada, a Task falha com FirebaseFirestoreException:
+     *  - NOT_FOUND: o chamado não existe mais;
+     *  - FAILED_PRECONDITION com mensagem JA_ENCERRADO: já não está em atendimento;
+     *  - FAILED_PRECONDITION com outra mensagem: é o nome do técnico que está atendendo
+     *    (o chamado é de outro técnico, então este app não permite encerrar).
+     *
+     * Só 3 campos são gravados, exatamente os que a regra "encerrar()" do
+     * firestore.rules permite: status, solucao e fechadoEm.
+     *
+     * @param chamadoId  ID do documento em chamados/{id}
+     * @param tecnicoUid uid do técnico logado
+     * @param solucao    o que foi feito (a tela já validou que não está vazio)
+     */
+    public Task<Void> encerrar(String chamadoId, String tecnicoUid, String solucao) {
+        DocumentReference chamadoRef = db.collection(COLECAO_CHAMADOS).document(chamadoId);
+        final String textoSolucao = solucao == null ? "" : solucao.trim();
+
+        return db.runTransaction((Transaction.Function<Void>) transacao -> {
+            DocumentSnapshot atual = transacao.get(chamadoRef);
+
+            if (!atual.exists()) {
+                throw new FirebaseFirestoreException("Chamado não encontrado",
+                        FirebaseFirestoreException.Code.NOT_FOUND);
+            }
+            if (!Chamado.STATUS_EM_ATENDIMENTO.equals(atual.getString("status"))) {
+                throw new FirebaseFirestoreException(JA_ENCERRADO,
+                        FirebaseFirestoreException.Code.FAILED_PRECONDITION);
+            }
+            if (!tecnicoUid.equals(atual.getString("tecnicoUid"))) {
+                // Assumido por outro técnico: não permite e diz quem está atendendo
+                String quem = atual.getString("tecnicoNome");
+                throw new FirebaseFirestoreException(quem != null ? quem : "",
+                        FirebaseFirestoreException.Code.FAILED_PRECONDITION);
+            }
+
+            Map<String, Object> mudancas = new HashMap<>();
+            mudancas.put("status", Chamado.STATUS_ENCERRADO);
+            mudancas.put("solucao", textoSolucao);
+            mudancas.put("fechadoEm", FieldValue.serverTimestamp());
+            transacao.update(chamadoRef, mudancas);
+            return null;
         });
     }
 }

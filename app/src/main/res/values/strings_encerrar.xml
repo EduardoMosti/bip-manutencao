@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Textos da US-05 (encerrar chamado com a solução).
+    Arquivo separado do strings.xml para evitar conflito de merge com os colegas.
+-->
+<resources>
+
+    <!-- Tela inicial -->
+    <string name="main_meus_atendimentos">Meus atendimentos</string>
+
+    <!-- Lista "Meus atendimentos" (chamados assumidos por mim e ainda não encerrados) -->
+    <string name="atendimentos_titulo">Meus atendimentos</string>
+    <string name="atendimentos_vazio_titulo">Nenhum chamado em atendimento</string>
+    <string name="atendimentos_vazio_texto">Quando você assumir um chamado da fila, ele aparece aqui para ser encerrado.</string>
+    <string name="atendimentos_erro">Não foi possível carregar seus atendimentos. Verifique a internet e se você entrou como técnico.</string>
+    <string name="atendimentos_info">Aberto em %1$s · assumido em %2$s</string>
+    <string name="atendimentos_btn_encerrar">Encerrar</string>
+
+    <!-- Formulário de encerramento -->
+    <string name="encerrar_titulo">Encerrar chamado</string>
+    <string name="encerrar_hint_solucao">O que foi feito para resolver</string>
+    <string name="encerrar_botao">Encerrar chamado</string>
+    <string name="encerrar_erro_solucao_vazia">Descreva a solução aplicada</string>
+    <string name="encerrar_sucesso">Chamado encerrado com sucesso</string>
+    <string name="encerrar_ja_encerrado">Este chamado já foi encerrado.</string>
+    <string name="encerrar_de_outro_tecnico">Este chamado está em atendimento com %1$s. Só quem o assumiu pode encerrá-lo.</string>
+    <string name="encerrar_de_outro_tecnico_sem_nome">Este chamado foi assumido por outro técnico. Só quem o assumiu pode encerrá-lo.</string>
+    <string name="encerrar_nao_encontrado">Este chamado não existe mais.</string>
+    <string name="encerrar_sem_permissao">Somente o técnico que assumiu o chamado pode encerrá-lo.</string>
+    <string name="encerrar_erro_rede">Sem conexão. Verifique a internet e tente de novo</string>
+    <string name="encerrar_erro_gravar">Não foi possível encerrar o chamado. Tente novamente</string>
+    <string name="encerrar_ok">OK</string>
+</resources>

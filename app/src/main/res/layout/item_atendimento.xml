@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Uma linha de "Meus atendimentos": prioridade, máquina, descrição, horários e botão Encerrar. -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="6dp"
+    app:cardBackgroundColor="@color/bip_superficie"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/bip_borda"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipPrioridadeAtendimento"
+            style="@style/Widget.Material3.Chip.Assist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:textColor="@color/bip_grafite"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:chipMinHeight="28dp"
+            app:chipStrokeWidth="0dp"
+            app:ensureMinTouchTargetSize="false"
+            tools:text="Alta" />
+
+        <TextView
+            android:id="@+id/tvMaquinaAtendimento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/bip_texto_primario"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="MAQ-001 - Injetora 3" />
+
+        <TextView
+            android:id="@+id/tvDescricaoAtendimento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/bip_texto_primario"
+            android:textSize="15sp"
+            tools:text="Vazamento de óleo na prensa, a máquina parou no meio do turno" />
+
+        <TextView
+            android:id="@+id/tvInfoAtendimento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/bip_texto_secundario"
+            android:textSize="13sp"
+            tools:text="Aberto em 25/11 12:08 · assumido em 25/11 12:30" />
+
+        <!-- US-05: abre o formulário de encerramento -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEncerrarAtendimento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:text="@string/atendimentos_btn_encerrar" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

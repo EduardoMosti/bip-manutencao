@@ -54,6 +54,14 @@
         <activity
             android:name=".FilaChamadosActivity"
             android:exported="false" />
+        <!-- US-05: chamados que o técnico assumiu e o formulário para encerrar -->
+        <activity
+            android:name=".MeusChamadosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EncerrarChamadoActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
