@@ -80,6 +80,16 @@
                 android:text="@string/qr_instrucao"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <!-- US-06: só aparece quando o QR é de uma máquina (EXTRA_MAQUINA) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnHistoricoMaquina"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/historico_botao"
+                android:visibility="gone"
+                tools:visibility="visible" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
