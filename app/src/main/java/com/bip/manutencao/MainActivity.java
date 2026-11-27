@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 /**
  * Tela inicial. US-08: mostra só as ações do perfil do usuário, lido de usuarios/{uid}.
- *  - operador: Abrir chamado;
+ *  - operador: Abrir chamado e Assinar encerramentos;
  *  - técnico: Fila de chamados, Meus atendimentos e Máquinas;
  *  - sem perfil definido: nenhuma ação, só o aviso.
  * Esconder botão é só a parte visual: quem garante a segurança são as regras do Firestore.
@@ -64,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
         // US-02: o operador começa o chamado lendo a máquina
         findViewById(R.id.btnAbrirChamado).setOnClickListener(v ->
                 startActivity(new Intent(this, LeituraMaquinaActivity.class)));
+
+        // US-12: o operador assina os encerramentos lendo o QR da matrícula
+        findViewById(R.id.btnAssinarEncerramento).setOnClickListener(v ->
+                startActivity(new Intent(this, AssinarEncerramentoActivity.class)));
 
         // US-03: o técnico vê a fila de chamados abertos
         findViewById(R.id.btnFilaChamados).setOnClickListener(v ->
@@ -108,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         boolean tecnico = UsuarioRepository.PERFIL_TECNICO.equals(perfil);
 
         findViewById(R.id.btnAbrirChamado).setVisibility(operador ? View.VISIBLE : View.GONE);
+        findViewById(R.id.btnAssinarEncerramento).setVisibility(operador ? View.VISIBLE : View.GONE);
         findViewById(R.id.btnFilaChamados).setVisibility(tecnico ? View.VISIBLE : View.GONE);
         findViewById(R.id.btnMeusAtendimentos).setVisibility(tecnico ? View.VISIBLE : View.GONE);
         findViewById(R.id.btnMaquinas).setVisibility(tecnico ? View.VISIBLE : View.GONE);

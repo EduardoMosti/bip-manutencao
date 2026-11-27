@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Textos da US-12 (operador assina o encerramento lendo o QR da matrícula).
+    Arquivo separado do strings.xml para evitar conflito de merge com os colegas.
+-->
+<resources>
+
+    <!-- Tela inicial (operador) -->
+    <string name="main_assinar_encerramento">Assinar encerramentos</string>
+
+    <!-- Lista de chamados encerrados aguardando a assinatura do operador -->
+    <string name="assinatura_titulo">Assinar encerramento</string>
+    <string name="assinatura_vazio_titulo">Nenhum encerramento para assinar</string>
+    <string name="assinatura_vazio_texto">Quando o técnico encerrar um chamado que você abriu, ele aparece aqui para você confirmar.</string>
+    <string name="assinatura_erro">Não foi possível carregar seus chamados. Verifique a internet e se você entrou como operador.</string>
+    <string name="assinatura_encerrado_em">Encerrado em %1$s</string>
+    <string name="assinatura_tecnico">Técnico: %1$s</string>
+    <string name="assinatura_solucao">Solução: %1$s</string>
+    <string name="assinatura_botao">Assinar com QR da matrícula</string>
+    <string name="assinatura_prompt_scanner">Aponte a câmera para o QR da sua matrícula</string>
+
+    <!-- Resultado da assinatura -->
+    <string name="assinatura_sucesso">Encerramento assinado com sucesso</string>
+    <string name="assinatura_erro_outra_matricula">O QR lido é de outra matrícula. O encerramento não foi assinado.</string>
+    <string name="assinatura_erro_sem_matricula">Sua matrícula ainda não foi cadastrada. Peça a quem administra o app para cadastrá-la.</string>
+    <string name="assinatura_erro_ja_assinado">Este chamado já foi assinado.</string>
+    <string name="assinatura_erro_nao_encerrado">Este chamado ainda não foi encerrado pelo técnico.</string>
+    <string name="assinatura_erro_nao_encontrado">Este chamado não existe mais.</string>
+    <string name="assinatura_erro_sem_permissao">Somente o operador que abriu o chamado pode assinar o encerramento, com a própria matrícula.</string>
+    <string name="assinatura_erro_rede">Sem conexão. Verifique a internet e tente de novo</string>
+    <string name="assinatura_erro_gravar">Não foi possível assinar o encerramento. Tente novamente</string>
+    <string name="assinatura_ok">OK</string>
+</resources>
