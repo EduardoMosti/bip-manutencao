@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Textos da US-08 (perfil definido no console).
+    Arquivo separado do strings.xml para evitar conflito de merge com os colegas.
+-->
+<resources>
+    <string name="perfil_rotulo">Perfil: %1$s</string>
+    <string name="perfil_operador">Operador</string>
+    <string name="perfil_tecnico">Técnico de manutenção</string>
+    <string name="perfil_nao_definido">Seu perfil ainda não foi definido. Peça a quem administra o app para definir o seu perfil e abra o app de novo.</string>
+    <string name="perfil_erro">Não foi possível carregar o seu perfil. Verifique a internet e abra o app de novo.</string>
+</resources>

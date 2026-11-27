@@ -58,8 +58,29 @@
                     android:textColor="@color/bip_texto_primario"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+                <!-- US-08: perfil lido de usuarios/{uid} -->
+                <TextView
+                    android:id="@+id/tvPerfil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/bip_texto_secundario"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    tools:text="Perfil: Técnico de manutenção" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <!-- US-08: aviso quando o perfil não existe ou não carregou -->
+        <TextView
+            android:id="@+id/tvAvisoPerfil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textColor="@color/bip_texto_secundario"
+            android:textSize="15sp"
+            android:visibility="gone" />
 
         <!-- US-02: ação principal do operador -->
         <com.google.android.material.button.MaterialButton
