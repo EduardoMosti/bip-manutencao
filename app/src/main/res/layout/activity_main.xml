@@ -94,6 +94,20 @@
             android:textStyle="bold"
             app:cornerRadius="16dp" />
 
+        <!-- US-11: o operador acompanha os chamados que abriu e a previsão do técnico -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMeusChamados"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/main_meus_chamados"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="16dp"
+            app:strokeColor="@color/bip_borda" />
+
         <!-- US-03: fila de chamados do técnico -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnFilaChamados"

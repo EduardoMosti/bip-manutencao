@@ -156,7 +156,7 @@ public class FilaChamadosActivity extends AppCompatActivity
     // US-04 (C4): assumir chamado
     // ------------------------------------------------------------------
 
-    /** Clique em "Assumir" numa linha (vem do Adapter): pede confirmação antes. */
+    /** Clique em "Assumir" numa linha (vem do Adapter): pede confirmação e a previsão de chegada. */
     @Override
     public void onAssumir(Chamado chamado) {
         if (assumindo) {
@@ -165,17 +165,22 @@ public class FilaChamadosActivity extends AppCompatActivity
         String maquina = getString(R.string.chamado_maquina_valor,
                 texto(chamado.getMaquinaId()), texto(chamado.getMaquinaNome()));
 
+        // US-11: o técnico escolhe em quanto tempo chega (padrão: 10 min)
+        String[] opcoes = getResources().getStringArray(R.array.previsao_opcoes);
+        int[] minutos = getResources().getIntArray(R.array.previsao_minutos);
+        int[] escolha = {1};
+
         new MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.assumir_confirmar_titulo)
-                .setMessage(getString(R.string.assumir_confirmar_mensagem,
-                        maquina, texto(chamado.getDescricao())))
+                .setTitle(getString(R.string.previsao_dialogo_titulo, maquina))
+                .setSingleChoiceItems(opcoes, escolha[0], (dialogo, qual) -> escolha[0] = qual)
                 .setNegativeButton(R.string.assumir_cancelar, null)
-                .setPositiveButton(R.string.assumir_botao, (dialogo, botao) -> assumir(chamado))
+                .setPositiveButton(R.string.assumir_botao,
+                        (dialogo, botao) -> assumir(chamado, minutos[escolha[0]]))
                 .show();
     }
 
     /** Chama a transação do Repository e trata o resultado. */
-    private void assumir(Chamado chamado) {
+    private void assumir(Chamado chamado, int minutosPrevisao) {
         FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
         if (usuario == null || chamado.getId() == null) {
             Toast.makeText(this, R.string.erro_sem_login, Toast.LENGTH_LONG).show();
@@ -184,7 +189,8 @@ public class FilaChamadosActivity extends AppCompatActivity
 
         setAssumindo(true);
         // "this" nos listeners: são removidos sozinhos se a tela for destruída
-        repositorio.assumir(chamado.getId(), usuario.getUid(), usuario.getEmail())
+        repositorio.assumir(chamado.getId(), usuario.getUid(), usuario.getEmail(),
+                        minutosPrevisao)
                 .addOnSuccessListener(this, unused -> {
                     setAssumindo(false);
                     // Não precisa tirar da lista à mão: o listener da fila faz isso

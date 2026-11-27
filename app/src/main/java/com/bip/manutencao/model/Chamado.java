@@ -64,6 +64,9 @@ public class Chamado {
     private String area;
     private List<String> habilidades;
 
+    // US-11: horário previsto de chegada do técnico (gravado ao assumir)
+    private Timestamp previsaoChegada;
+
     // Construtor vazio: obrigatório para o Firestore montar o objeto sozinho.
     public Chamado() {
     }
@@ -115,4 +118,7 @@ public class Chamado {
 
     public List<String> getHabilidades() { return habilidades; }
     public void setHabilidades(List<String> habilidades) { this.habilidades = habilidades; }
+
+    public Timestamp getPrevisaoChegada() { return previsaoChegada; }
+    public void setPrevisaoChegada(Timestamp previsaoChegada) { this.previsaoChegada = previsaoChegada; }
 }

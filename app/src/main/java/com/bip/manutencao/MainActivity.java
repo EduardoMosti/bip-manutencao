@@ -65,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnAbrirChamado).setOnClickListener(v ->
                 startActivity(new Intent(this, LeituraMaquinaActivity.class)));
 
+        // US-11: o operador acompanha os chamados que abriu
+        findViewById(R.id.btnMeusChamados).setOnClickListener(v ->
+                startActivity(new Intent(this, AcompanhamentoActivity.class)));
+
         // US-03: o técnico vê a fila de chamados abertos
         findViewById(R.id.btnFilaChamados).setOnClickListener(v ->
                 startActivity(new Intent(this, FilaChamadosActivity.class)));
@@ -108,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         boolean tecnico = UsuarioRepository.PERFIL_TECNICO.equals(perfil);
 
         findViewById(R.id.btnAbrirChamado).setVisibility(operador ? View.VISIBLE : View.GONE);
+        findViewById(R.id.btnMeusChamados).setVisibility(operador ? View.VISIBLE : View.GONE);
         findViewById(R.id.btnFilaChamados).setVisibility(tecnico ? View.VISIBLE : View.GONE);
         findViewById(R.id.btnMeusAtendimentos).setVisibility(tecnico ? View.VISIBLE : View.GONE);
         findViewById(R.id.btnMaquinas).setVisibility(tecnico ? View.VISIBLE : View.GONE);

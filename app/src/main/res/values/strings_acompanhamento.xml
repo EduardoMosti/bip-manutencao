@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    US-11 - Acompanhamento do chamado pelo operador e previsão de chegada do técnico.
+    Arquivo separado para evitar conflito de merge com os colegas.
+-->
+<resources>
+    <!-- Tela inicial do operador -->
+    <string name="main_meus_chamados">Acompanhar meus chamados</string>
+
+    <!-- Tela de acompanhamento -->
+    <string name="acompanhamento_titulo">Meus chamados</string>
+    <string name="acompanhamento_vazio_titulo">Você ainda não abriu chamados</string>
+    <string name="acompanhamento_vazio_texto">Toque em Abrir chamado e leia o QR da máquina parada.</string>
+    <string name="acompanhamento_erro">Não foi possível carregar seus chamados. Verifique a internet e tente de novo.</string>
+
+    <!-- Situação de cada chamado -->
+    <string name="acompanhamento_status_aberto">Aguardando técnico</string>
+    <string name="acompanhamento_status_em_atendimento">Técnico a caminho</string>
+    <string name="acompanhamento_status_encerrado">Encerrado</string>
+
+    <string name="acompanhamento_aguardando">Nenhum técnico assumiu ainda. Esta tela atualiza sozinha.</string>
+    <string name="acompanhamento_previsao">%1$s chega às %2$s</string>
+    <string name="acompanhamento_sem_previsao">%1$s assumiu o chamado</string>
+    <string name="acompanhamento_encerrado">Atendido por %1$s</string>
+    <string name="acompanhamento_aberto_em">Aberto em %1$s</string>
+    <string name="acompanhamento_tecnico_padrao">O técnico</string>
+    <string name="acompanhamento_horario_pendente">agora</string>
+
+    <!-- Diálogo do técnico ao assumir -->
+    <string name="previsao_dialogo_titulo">Assumir %1$s? Em quanto tempo você chega?</string>
+    <string-array name="previsao_opcoes">
+        <item>5 minutos</item>
+        <item>10 minutos</item>
+        <item>15 minutos</item>
+        <item>30 minutos</item>
+        <item>1 hora</item>
+    </string-array>
+    <integer-array name="previsao_minutos">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+    </integer-array>
+</resources>

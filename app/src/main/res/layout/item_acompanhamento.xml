@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- US-11: uma linha dos chamados do operador (situação, máquina, técnico e previsão). -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="6dp"
+    app:cardBackgroundColor="@color/bip_superficie"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/bip_borda"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Selo da situação: texto e cor definidos no Adapter -->
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipStatusAcompanhamento"
+            style="@style/Widget.Material3.Chip.Assist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:textColor="@color/bip_grafite"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:chipMinHeight="28dp"
+            app:chipStrokeWidth="0dp"
+            app:ensureMinTouchTargetSize="false"
+            tools:text="Técnico a caminho" />
+
+        <TextView
+            android:id="@+id/tvMaquinaAcompanhamento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/bip_texto_primario"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="MAQ-001 - Injetora 3" />
+
+        <TextView
+            android:id="@+id/tvDescricaoAcompanhamento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/bip_texto_primario"
+            android:textSize="15sp"
+            tools:text="Vazamento de óleo no cilindro hidráulico" />
+
+        <!-- Técnico e previsão de chegada em destaque (o que a US-11 pede) -->
+        <TextView
+            android:id="@+id/tvSituacaoAcompanhamento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/bip_amarelo"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="Carlos chega às 14:35" />
+
+        <TextView
+            android:id="@+id/tvAbertoAcompanhamento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/bip_texto_secundario"
+            android:textSize="13sp"
+            tools:text="Aberto em 27/11 14:20" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -66,6 +66,10 @@
         <activity
             android:name=".HistoricoMaquinaActivity"
             android:exported="false" />
+        <!-- US-11: o operador acompanha os chamados e a previsão de chegada -->
+        <activity
+            android:name=".AcompanhamentoActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

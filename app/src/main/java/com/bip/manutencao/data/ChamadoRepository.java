@@ -3,6 +3,7 @@ package com.bip.manutencao.data;
 import com.bip.manutencao.model.Chamado;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -14,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -200,6 +202,15 @@ public class ChamadoRepository {
      * @param nomeReserva nome usado se não houver "nome" em usuarios/{uid} (ex.: o e-mail)
      */
     public Task<Void> assumir(String chamadoId, String tecnicoUid, String nomeReserva) {
+        return assumir(chamadoId, tecnicoUid, nomeReserva, 0);
+    }
+
+    /**
+     * US-11: igual ao assumir acima, mas também grava a previsão de chegada
+     * (agora + minutos). Com minutosPrevisao = 0, nenhuma previsão é gravada.
+     */
+    public Task<Void> assumir(String chamadoId, String tecnicoUid, String nomeReserva,
+                              int minutosPrevisao) {
         DocumentReference chamadoRef = db.collection(COLECAO_CHAMADOS).document(chamadoId);
         DocumentReference usuarioRef = db.collection(COLECAO_USUARIOS).document(tecnicoUid);
 
@@ -229,12 +240,17 @@ public class ChamadoRepository {
                             FirebaseFirestoreException.Code.FAILED_PRECONDITION);
                 }
 
-                // Só os 4 campos que a regra "assumir()" do firestore.rules permite
+                // Só os campos que a regra "assumir()" do firestore.rules permite
                 Map<String, Object> mudancas = new HashMap<>();
                 mudancas.put("status", Chamado.STATUS_EM_ATENDIMENTO);
                 mudancas.put("tecnicoUid", tecnicoUid);
                 mudancas.put("tecnicoNome", nomeTecnico);
                 mudancas.put("assumidoEm", FieldValue.serverTimestamp());
+                // US-11: previsão de chegada que o operador acompanha
+                if (minutosPrevisao > 0) {
+                    long chegada = System.currentTimeMillis() + minutosPrevisao * 60_000L;
+                    mudancas.put("previsaoChegada", new Timestamp(new Date(chegada)));
+                }
                 transacao.update(chamadoRef, mudancas);
                 return null;
             });
