@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Repository: a classe que conversa com a coleção "chamados" do Firestore (US-02 a US-05).
+ * Repository: a classe que conversa com a coleção "chamados" do Firestore (US-02 a US-05 e US-12).
  *
  * Ela também tem a busca de máquina pelo código do QR. Ficou aqui, e não no
  * MaquinaRepository (US-01), para não mexer no arquivo de outra história
@@ -335,6 +335,128 @@ public class ChamadoRepository {
             mudancas.put("status", Chamado.STATUS_ENCERRADO);
             mudancas.put("solucao", textoSolucao);
             mudancas.put("fechadoEm", FieldValue.serverTimestamp());
+            transacao.update(chamadoRef, mudancas);
+            return null;
+        });
+    }
+
+    // ------------------------------------------------------------------
+    // US-12: o operador assina o encerramento com a matrícula lida no QR
+    // ------------------------------------------------------------------
+
+    // Mensagens-código das recusas (a tela troca cada uma por um texto em português)
+    public static final String ASSINATURA_OUTRA_MATRICULA = "__outra_matricula__";
+    public static final String ASSINATURA_SEM_MATRICULA = "__sem_matricula__";
+    public static final String ASSINATURA_JA_ASSINADO = "__ja_assinado__";
+    public static final String ASSINATURA_NAO_ENCERRADO = "__nao_encerrado__";
+
+    /**
+     * Fica "ouvindo" os chamados que ESTE operador abriu, que já foram encerrados pelo
+     * técnico e ainda não foram assinados (snapshot listener - NC2).
+     *
+     * Dois filtros de igualdade (abertoPor + status) não exigem índice composto.
+     * Quem ainda não tem assinatura é separado aqui no código, porque o Firestore não
+     * filtra por "campo que não existe". O mais antigo encerrado aparece primeiro.
+     *
+     * @return o registro do listener. A Activity DEVE chamar remove() no onStop.
+     */
+    public ListenerRegistration ouvirAguardandoAssinatura(String operadorUid,
+                                                          OnChamadosListener callback) {
+        return db.collection(COLECAO_CHAMADOS)
+                .whereEqualTo("abertoPor", operadorUid)
+                .whereEqualTo("status", Chamado.STATUS_ENCERRADO)
+                .addSnapshotListener((snapshot, erro) -> {
+                    if (erro != null || snapshot == null) {
+                        callback.onErro(erro);
+                        return;
+                    }
+                    List<Chamado> lista = new ArrayList<>();
+                    for (DocumentSnapshot doc : snapshot.getDocuments()) {
+                        Chamado chamado = doc.toObject(Chamado.class,
+                                DocumentSnapshot.ServerTimestampBehavior.ESTIMATE);
+                        if (chamado != null && chamado.getAssinadoEm() == null) {
+                            lista.add(chamado);
+                        }
+                    }
+                    Collections.sort(lista, COMPARADOR_ASSINATURA);
+                    callback.onLista(lista);
+                });
+    }
+
+    /** Horário do encerramento, em milissegundos; sem horário, vai para o fim. */
+    private static long milissegundosFechado(Chamado chamado) {
+        return chamado.getFechadoEm() == null
+                ? Long.MAX_VALUE
+                : chamado.getFechadoEm().toDate().getTime();
+    }
+
+    private static final Comparator<Chamado> COMPARADOR_ASSINATURA = (a, b) ->
+            Long.compare(milissegundosFechado(a), milissegundosFechado(b));
+
+    /**
+     * O operador assina o encerramento: compara a matrícula lida no QR com a matrícula
+     * cadastrada em usuarios/{uid} e, se forem iguais, grava assinaturaMatricula e
+     * assinadoEm (horário do servidor) no chamado.
+     *
+     * Por que transação? Para ler o chamado e a matrícula e gravar numa operação só:
+     * se algo mudou no meio (já assinado, por exemplo), nada é gravado.
+     *
+     * A matrícula do usuário é cadastrada pelo grupo no console (como o perfil): o app
+     * nunca a grava e as regras do Firestore impedem o usuário de alterá-la.
+     *
+     * Quando a transação é cancelada, a Task falha com FirebaseFirestoreException:
+     *  - NOT_FOUND: o chamado não existe mais;
+     *  - PERMISSION_DENIED: o chamado não é deste operador;
+     *  - FAILED_PRECONDITION com uma das mensagens ASSINATURA_*: o motivo da recusa
+     *    (QR de outra matrícula, operador sem matrícula, já assinado, não encerrado).
+     *
+     * Só 2 campos são gravados, exatamente os que a regra "assinar()" do firestore.rules
+     * permite: assinaturaMatricula e assinadoEm.
+     *
+     * @param chamadoId     ID do documento em chamados/{id}
+     * @param operadorUid   uid do operador logado
+     * @param matriculaLida texto lido no QR
+     */
+    public Task<Void> assinar(String chamadoId, String operadorUid, String matriculaLida) {
+        DocumentReference chamadoRef = db.collection(COLECAO_CHAMADOS).document(chamadoId);
+        DocumentReference usuarioRef = db.collection(COLECAO_USUARIOS).document(operadorUid);
+        final String lida = matriculaLida == null ? "" : matriculaLida.trim();
+
+        return db.runTransaction((Transaction.Function<Void>) transacao -> {
+            // Primeiro as leituras, depois a gravação (regra das transações)
+            DocumentSnapshot chamado = transacao.get(chamadoRef);
+            if (!chamado.exists()) {
+                throw new FirebaseFirestoreException("Chamado não encontrado",
+                        FirebaseFirestoreException.Code.NOT_FOUND);
+            }
+            if (!operadorUid.equals(chamado.getString("abertoPor"))) {
+                throw new FirebaseFirestoreException("Chamado de outro operador",
+                        FirebaseFirestoreException.Code.PERMISSION_DENIED);
+            }
+            if (!Chamado.STATUS_ENCERRADO.equals(chamado.getString("status"))) {
+                throw new FirebaseFirestoreException(ASSINATURA_NAO_ENCERRADO,
+                        FirebaseFirestoreException.Code.FAILED_PRECONDITION);
+            }
+            if (chamado.get("assinadoEm") != null) {
+                throw new FirebaseFirestoreException(ASSINATURA_JA_ASSINADO,
+                        FirebaseFirestoreException.Code.FAILED_PRECONDITION);
+            }
+
+            DocumentSnapshot usuario = transacao.get(usuarioRef);
+            String cadastrada = usuario.getString("matricula");
+            if (cadastrada == null || cadastrada.trim().isEmpty()) {
+                throw new FirebaseFirestoreException(ASSINATURA_SEM_MATRICULA,
+                        FirebaseFirestoreException.Code.FAILED_PRECONDITION);
+            }
+            if (!cadastrada.trim().equals(lida)) {
+                // QR de outra pessoa: recusa e NÃO grava nada
+                throw new FirebaseFirestoreException(ASSINATURA_OUTRA_MATRICULA,
+                        FirebaseFirestoreException.Code.FAILED_PRECONDITION);
+            }
+
+            Map<String, Object> mudancas = new HashMap<>();
+            mudancas.put("assinaturaMatricula", cadastrada); // igual ao cadastro (as regras conferem)
+            mudancas.put("assinadoEm", FieldValue.serverTimestamp());
             transacao.update(chamadoRef, mudancas);
             return null;
         });

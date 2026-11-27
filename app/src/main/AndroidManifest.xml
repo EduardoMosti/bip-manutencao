@@ -66,6 +66,10 @@
         <activity
             android:name=".HistoricoMaquinaActivity"
             android:exported="false" />
+        <!-- US-12: o operador assina o encerramento lendo o QR da matrícula -->
+        <activity
+            android:name=".AssinarEncerramentoActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

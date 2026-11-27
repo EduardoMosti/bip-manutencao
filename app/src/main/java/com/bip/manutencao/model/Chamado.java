@@ -12,6 +12,7 @@ import com.google.firebase.firestore.DocumentId;
  * prioridade, status, abertoPor, abertoPorNome e abertoEm.
  * Quem atende (técnico) preenche depois: tecnicoUid, tecnicoNome, assumidoEm,
  * solucao e fechadoEm.
+ * Depois, o operador que abriu assina o encerramento (US-12): assinaturaMatricula e assinadoEm.
  *
  * O ID do documento NÃO é um campo gravado: a anotação @DocumentId faz o
  * Firestore preencher o campo "id" sozinho ao converter com toObject().
@@ -51,6 +52,10 @@ public class Chamado {
 
     private String solucao;
     private Timestamp fechadoEm;
+
+    // US-12: assinatura do operador que abriu o chamado (matrícula lida no QR e horário)
+    private String assinaturaMatricula;
+    private Timestamp assinadoEm;
 
     // Construtor vazio: obrigatório para o Firestore montar o objeto sozinho.
     public Chamado() {
@@ -97,4 +102,10 @@ public class Chamado {
 
     public Timestamp getFechadoEm() { return fechadoEm; }
     public void setFechadoEm(Timestamp fechadoEm) { this.fechadoEm = fechadoEm; }
+
+    public String getAssinaturaMatricula() { return assinaturaMatricula; }
+    public void setAssinaturaMatricula(String assinaturaMatricula) { this.assinaturaMatricula = assinaturaMatricula; }
+
+    public Timestamp getAssinadoEm() { return assinadoEm; }
+    public void setAssinadoEm(Timestamp assinadoEm) { this.assinadoEm = assinadoEm; }
 }
