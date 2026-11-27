@@ -1,7 +1,9 @@
 package com.bip.manutencao;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +33,8 @@ public class QrCodeActivity extends AppCompatActivity {
     public static final String EXTRA_CONTEUDO = "extra_conteudo";
     public static final String EXTRA_TITULO = "extra_titulo";
     public static final String EXTRA_SUBTITULO = "extra_subtitulo";
+    /** US-06 (opcional): true quando o QR é de uma máquina; mostra o botão "Ver histórico". */
+    public static final String EXTRA_MAQUINA = "extra_maquina";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,19 @@ public class QrCodeActivity extends AppCompatActivity {
             ivQr.setContentDescription(getString(R.string.qr_descricao, conteudo));
         } else {
             Toast.makeText(this, R.string.erro_qr_gerar, Toast.LENGTH_LONG).show();
+        }
+
+        // 3) US-06: QR de máquina ganha o botão "Ver histórico".
+        // O QR da matrícula (US-12) não manda o extra, então o botão fica escondido.
+        if (getIntent().getBooleanExtra(EXTRA_MAQUINA, false)) {
+            View btnHistorico = findViewById(R.id.btnHistoricoMaquina);
+            btnHistorico.setVisibility(View.VISIBLE);
+            btnHistorico.setOnClickListener(v -> {
+                Intent intent = new Intent(this, HistoricoMaquinaActivity.class);
+                intent.putExtra(HistoricoMaquinaActivity.EXTRA_CODIGO, conteudo);
+                intent.putExtra(HistoricoMaquinaActivity.EXTRA_NOME, titulo);
+                startActivity(intent);
+            });
         }
     }
 

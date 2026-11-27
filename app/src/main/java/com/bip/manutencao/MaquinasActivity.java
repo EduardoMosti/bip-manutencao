@@ -150,6 +150,7 @@ public class MaquinasActivity extends AppCompatActivity
         intent.putExtra(QrCodeActivity.EXTRA_TITULO, maquina.getNome());
         intent.putExtra(QrCodeActivity.EXTRA_SUBTITULO,
                 getString(R.string.maquina_setor_formato, maquina.getSetor()));
+        intent.putExtra(QrCodeActivity.EXTRA_MAQUINA, true); // US-06: botão "Ver histórico"
         startActivity(intent);
     }
 
