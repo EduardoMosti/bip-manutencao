@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bip.manutencao.R;
 import com.bip.manutencao.model.Chamado;
+import com.bip.manutencao.util.AreaHabilidades;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 
@@ -93,6 +94,8 @@ public class ChamadoAdapter extends RecyclerView.Adapter<ChamadoAdapter.ChamadoV
         holder.tvMaquina.setText(contexto.getString(R.string.chamado_maquina_valor,
                 textoOuVazio(chamado.getMaquinaId()), textoOuVazio(chamado.getMaquinaNome())));
         holder.tvDescricao.setText(textoOuVazio(chamado.getDescricao()));
+        // US-14: área e habilidades exigidas (ou "não informadas")
+        holder.tvArea.setText(AreaHabilidades.texto(contexto, chamado));
 
         // "Aberto por Fulano em 25/11 12:08" (sem horário ainda: "agora")
         String quem = chamado.getAbertoPorNome() == null || chamado.getAbertoPorNome().isEmpty()
@@ -129,6 +132,7 @@ public class ChamadoAdapter extends RecyclerView.Adapter<ChamadoAdapter.ChamadoV
         final TextView tvMaquina;
         final TextView tvDescricao;
         final TextView tvInfo;
+        final TextView tvArea; // US-14
         final MaterialButton btnAssumir;
 
         ChamadoViewHolder(@NonNull View itemView) {
@@ -137,6 +141,7 @@ public class ChamadoAdapter extends RecyclerView.Adapter<ChamadoAdapter.ChamadoV
             tvMaquina = itemView.findViewById(R.id.tvMaquinaChamado);
             tvDescricao = itemView.findViewById(R.id.tvDescricaoChamado);
             tvInfo = itemView.findViewById(R.id.tvInfoChamado);
+            tvArea = itemView.findViewById(R.id.tvAreaChamado);
             btnAssumir = itemView.findViewById(R.id.btnAssumirChamado);
         }
     }

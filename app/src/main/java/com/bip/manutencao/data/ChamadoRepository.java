@@ -89,6 +89,14 @@ public class ChamadoRepository {
             dados.put("abertoPorNome", nome);
             dados.put("abertoEm", FieldValue.serverTimestamp());
 
+            // US-14: área e habilidades só são gravadas quando o operador informou
+            if (chamado.getArea() != null && !chamado.getArea().isEmpty()) {
+                dados.put("area", chamado.getArea());
+            }
+            if (chamado.getHabilidades() != null && !chamado.getHabilidades().isEmpty()) {
+                dados.put("habilidades", chamado.getHabilidades());
+            }
+
             // 3) Grava em chamados/{id automático}
             return db.collection(COLECAO_CHAMADOS).document().set(dados);
         });

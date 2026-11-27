@@ -16,6 +16,7 @@ import com.bip.manutencao.data.ChamadoRepository;
 import com.bip.manutencao.model.Chamado;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
@@ -23,6 +24,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AbrirChamadoActivity extends AppCompatActivity {
 
@@ -33,6 +37,8 @@ public class AbrirChamadoActivity extends AppCompatActivity {
     private TextInputLayout tilDescricao;
     private TextInputEditText edtDescricao;
     private ChipGroup chipsPrioridade;
+    private ChipGroup chipsArea;          // US-14
+    private ChipGroup chipsHabilidades;   // US-14
     private TextView tvErroPrioridade;
     private CircularProgressIndicator progressChamado;
     private MaterialButton btnAbrirChamado;
@@ -74,6 +80,8 @@ public class AbrirChamadoActivity extends AppCompatActivity {
         tilDescricao = findViewById(R.id.tilDescricao);
         edtDescricao = findViewById(R.id.edtDescricao);
         chipsPrioridade = findViewById(R.id.chipsPrioridade);
+        chipsArea = findViewById(R.id.chipsArea);
+        chipsHabilidades = findViewById(R.id.chipsHabilidades);
         tvErroPrioridade = findViewById(R.id.tvErroPrioridade);
         progressChamado = findViewById(R.id.progressChamado);
         btnAbrirChamado = findViewById(R.id.btnAbrirChamado);
@@ -113,6 +121,33 @@ public class AbrirChamadoActivity extends AppCompatActivity {
         return null;
     }
 
+    /** US-14: área escolhida (opcional). Sem escolha: null. */
+    private String areaSelecionada() {
+        int id = chipsArea.getCheckedChipId();
+        if (id == R.id.chipAreaMecanica) {
+            return Chamado.AREA_MECANICA;
+        } else if (id == R.id.chipAreaEletrica) {
+            return Chamado.AREA_ELETRICA;
+        } else if (id == R.id.chipAreaHidraulica) {
+            return Chamado.AREA_HIDRAULICA;
+        } else if (id == R.id.chipAreaPneumatica) {
+            return Chamado.AREA_PNEUMATICA;
+        }
+        return null;
+    }
+
+    /** US-14: habilidades marcadas (opcional). Guarda o texto de cada chip marcado. */
+    private List<String> habilidadesSelecionadas() {
+        List<String> lista = new ArrayList<>();
+        for (int id : chipsHabilidades.getCheckedChipIds()) {
+            Chip chip = findViewById(id);
+            if (chip != null) {
+                lista.add(chip.getText().toString());
+            }
+        }
+        return lista;
+    }
+
     private void abrirChamado() {
         tilDescricao.setError(null);
         tvErroPrioridade.setVisibility(View.GONE);
@@ -145,6 +180,8 @@ public class AbrirChamadoActivity extends AppCompatActivity {
         chamado.setMaquinaNome(nomeMaquina);
         chamado.setDescricao(descricao);
         chamado.setPrioridade(prioridade);
+        chamado.setArea(areaSelecionada());                 // US-14
+        chamado.setHabilidades(habilidadesSelecionadas());  // US-14
         chamado.setAbertoPor(usuario.getUid());
         // Nome de reserva: o repositório usa o nome de usuarios/{uid} quando existir
         chamado.setAbertoPorNome(usuario.getEmail());

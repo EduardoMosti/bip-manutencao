@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    US-14 - Área de manutenção e habilidades exigidas pelo chamado.
+    Arquivo separado para evitar conflito de merge com os colegas.
+-->
+<resources>
+    <!-- Formulário do operador -->
+    <string name="area_label">Área de manutenção (opcional)</string>
+    <string name="habilidades_label">Habilidades exigidas (opcional)</string>
+
+    <string name="area_mecanica">Mecânica</string>
+    <string name="area_eletrica">Elétrica</string>
+    <string name="area_hidraulica">Hidráulica</string>
+    <string name="area_pneumatica">Pneumática</string>
+
+    <string name="habilidade_solda">Solda</string>
+    <string name="habilidade_nr10">Elétrica NR-10</string>
+    <string name="habilidade_clp">Automação / CLP</string>
+    <string name="habilidade_usinagem">Usinagem</string>
+    <string name="habilidade_alinhamento">Alinhamento</string>
+    <string name="habilidade_lubrificacao">Lubrificação</string>
+
+    <!-- Cartão do técnico -->
+    <string name="area_valor">Área: %1$s</string>
+    <string name="habilidades_valor">Habilidades: %1$s</string>
+    <string name="area_habilidades_separador">" · "</string>
+    <string name="area_habilidades_nao_informadas">Área e habilidades não informadas</string>
+</resources>

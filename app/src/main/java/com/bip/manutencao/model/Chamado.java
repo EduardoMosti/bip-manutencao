@@ -3,6 +3,8 @@ package com.bip.manutencao.model;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentId;
 
+import java.util.List;
+
 /**
  * Modelo de um chamado de manutenção (US-02, usado também por US-03, 04, 05 e 06).
  *
@@ -32,6 +34,12 @@ public class Chamado {
     public static final String PRIORIDADE_MEDIA = "media";
     public static final String PRIORIDADE_ALTA = "alta";
 
+    // US-14: áreas de manutenção aceitas em "area" (opcional)
+    public static final String AREA_MECANICA = "mecanica";
+    public static final String AREA_ELETRICA = "eletrica";
+    public static final String AREA_HIDRAULICA = "hidraulica";
+    public static final String AREA_PNEUMATICA = "pneumatica";
+
     @DocumentId
     private String id;
 
@@ -51,6 +59,10 @@ public class Chamado {
 
     private String solucao;
     private Timestamp fechadoEm;
+
+    // US-14: área e habilidades exigidas (opcionais, informadas pelo operador)
+    private String area;
+    private List<String> habilidades;
 
     // Construtor vazio: obrigatório para o Firestore montar o objeto sozinho.
     public Chamado() {
@@ -97,4 +109,10 @@ public class Chamado {
 
     public Timestamp getFechadoEm() { return fechadoEm; }
     public void setFechadoEm(Timestamp fechadoEm) { this.fechadoEm = fechadoEm; }
+
+    public String getArea() { return area; }
+    public void setArea(String area) { this.area = area; }
+
+    public List<String> getHabilidades() { return habilidades; }
+    public void setHabilidades(List<String> habilidades) { this.habilidades = habilidades; }
 }

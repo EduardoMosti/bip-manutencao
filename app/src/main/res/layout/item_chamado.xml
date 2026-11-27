@@ -56,6 +56,16 @@
             android:textSize="15sp"
             tools:text="Vazamento de óleo na prensa, a máquina parou no meio do turno" />
 
+        <!-- US-14: área e habilidades exigidas pelo chamado -->
+        <TextView
+            android:id="@+id/tvAreaChamado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/bip_amarelo"
+            android:textSize="13sp"
+            tools:text="Área: Elétrica · Habilidades: Elétrica NR-10, Automação / CLP" />
+
         <TextView
             android:id="@+id/tvInfoChamado"
             android:layout_width="match_parent"
