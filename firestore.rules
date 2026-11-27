@@ -23,12 +23,16 @@ service cloud.firestore {
     }
 
     // Perfis: o usuario le o proprio documento, mas nunca escolhe nem altera o perfil.
+    // US-12: a matricula tambem e cadastrada pelo grupo no console (como o perfil),
+    // porque e ela que vale como assinatura do operador no encerramento do chamado.
     match /usuarios/{uid} {
       allow read: if logado() && request.auth.uid == uid;
       allow create: if logado() && request.auth.uid == uid
-                    && !('perfil' in request.resource.data);
+                    && !('perfil' in request.resource.data)
+                    && !('matricula' in request.resource.data);
       allow update: if logado() && request.auth.uid == uid
-                    && !('perfil' in request.resource.data.diff(resource.data).affectedKeys());
+                    && !request.resource.data.diff(resource.data).affectedKeys()
+                         .hasAny(['perfil', 'matricula']);
       allow delete: if false;
     }
 
@@ -60,7 +64,8 @@ service cloud.firestore {
                     && request.resource.data.descricao is string
                     && request.resource.data.descricao.size() > 0;
 
-      allow update: if ehTecnico() && (assumir() || encerrar());
+      allow update: if (ehTecnico() && (assumir() || encerrar()))
+                    || (ehOperador() && assinar());
       allow delete: if false;
 
       function assumir() {
@@ -79,6 +84,20 @@ service cloud.firestore {
           && request.resource.data.solucao.size() > 0
           && request.resource.data.diff(resource.data).affectedKeys()
                .hasOnly(['status', 'solucao', 'fechadoEm']);
+      }
+
+      // US-12: so o operador que abriu o chamado assina, uma unica vez, depois do
+      // encerramento, e a matricula gravada tem de ser a do proprio cadastro dele.
+      function assinar() {
+        return resource.data.status == 'encerrado'
+          && resource.data.abertoPor == request.auth.uid
+          && !('assinadoEm' in resource.data)
+          && request.resource.data.assinaturaMatricula is string
+          && request.resource.data.assinaturaMatricula
+               == get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.matricula
+          && request.resource.data.assinadoEm == request.time
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['assinaturaMatricula', 'assinadoEm']);
       }
     }
   }

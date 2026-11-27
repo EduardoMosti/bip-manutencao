@@ -111,11 +111,11 @@ O QR Code de cada máquina guarda o código dela, que é o ID do documento em `m
 ## Modelo de dados (Firestore)
 
 ```
-usuarios/{uid}        nome, email, perfil, matricula
+usuarios/{uid}        nome, email, perfil, matricula (perfil e matricula: so pelo console)
 maquinas/{codigo}     nome, setor
 chamados/{id}         maquinaId, descricao, prioridade, status, abertoPor,
                       tecnicoUid, tecnicoNome, abertoEm, assumidoEm,
-                      fechadoEm, solucao
+                      fechadoEm, solucao, assinaturaMatricula, assinadoEm
 ```
 
 Status do chamado: `aberto`, `em_atendimento`, `encerrado`. Prioridade: `baixa`, `media`, `alta`.
